@@ -17,7 +17,7 @@ const directives = {
   ],
   blockStart: [
     'WRAPPER', 'BLOCK',
-    'IF', 'UNLESS', 'SWITCH', 'FOREACH', 'WHILE',
+    'IF', 'UNLESS', 'SWITCH', 'FOR', 'FOREACH', 'WHILE',
     'FILTER', 'PERL', 'RAWPERL', 'TRY',
   ],
   blockMiddle: ['ELSIF', 'ELSE', 'CASE', 'CATCH', 'FINAL'],
