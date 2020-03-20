@@ -91,7 +91,7 @@ const tokensInTag: TokenDefinition[] = [
   },
   // String literal
   {
-    pattern: /^\"[^]*?\"|\'[^]*?\'/, // Anything including line breaks enclosed in "" or ''
+    pattern: /^(\"[^]*?\"|\'[^]*?\')/, // Anything including line breaks enclosed in "" or ''
     contextAfter: 'IN_TAG',
   },
   // Line comment
