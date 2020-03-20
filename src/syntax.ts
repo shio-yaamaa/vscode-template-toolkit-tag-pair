@@ -72,6 +72,12 @@ const tokensInTag: TokenDefinition[] = [
     tokenType: 'BLOCK_START_DIRECTIVE',
     contextAfter: 'IN_TAG',
   },
+  // Block-middle directives
+  {
+    pattern: fromDirectives(directives.blockMiddle),
+    tokenType: 'BLOCK_MIDDLE_DIRECTIVE',
+    contextAfter: 'IN_TAG',
+  },
   // Block-end directives
   {
     pattern: fromDirectives(directives.blockEnd),
@@ -117,4 +123,4 @@ export const stripTag = (tagText: string): string => {
   return tagText
     .replace(/^\[%[+-]?\s*/, '')
     .replace(/\s*[+-]?%]$/, '');
-}
+};
