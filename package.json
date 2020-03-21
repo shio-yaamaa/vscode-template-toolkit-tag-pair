@@ -10,16 +10,77 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"*"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
+		"colors": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+				"id": "templateToolkitTagPair.incompleteBlock",
+				"description": "The color to highlight incomplete blocks (i.e. blocks that lack the start or end directive)",
+				"defaults": {
+					"dark": "#B71C1C55",
+					"light": "#B71C1C55",
+					"highContrast": "#B71C1C55"
+				}
+			},
+			{
+				"id": "templateToolkitTagPair.correspondingDirectiveNextToTag",
+				"description": "The color of the corresponding directive rendered next to the END tags",
+				"defaults": {
+					"dark": "#FFFFFF33",
+					"light": "#00000033",
+					"highContrast": "#FFFFFF33"
+				}
 			}
-		]
+		],
+		"configuration": {
+			"title": "Template Toolkit Tag Pair",
+			"properties": {
+				"templateToolkitTagPair.general.languages": {
+					"description": "List of the languages for which this extension is activated",
+					"type": "array",
+					"default": ["tt", "html"]
+				},
+				"templateToolkitTagPair.highlight.target": {
+					"description": "Which part of the tag to highlight",
+					"type": "string",
+					"enum": ["tag", "directive"],
+					"enumDescriptions": [
+						"Highlight the entire tag containing a directive that constitutes a block",
+						"Highlight only the directive that constitutes a block"
+					],
+					"default": "tag"
+				},
+				"templateToolkitTagPair.highlight.depthColors": {
+					"description": "Colors to highlight blocks in the order of depth (Repeated when depth > depthColors.length)",
+					"type": "array",
+					"default": [
+						"#FF980022",
+						"#43A04722",
+						"#00BCD422",
+						"#3F51B522"
+					]
+				},
+				"templateToolkitTagPair.correspondingDirective.showOnHover": {
+					"description": "Whether to show the corresponding block-starting directive when you hover over the END tags",
+					"type": "boolean",
+					"default": "true"
+				},
+				"templateToolkitTagPair.correspondingDirective.showNextToTag": {
+					"description": "Whether to show the corresponding block-starting directive next to the END tags",
+					"type": "string",
+					"enum": ["always", "whenInSeparateLines", "whenDistant", "never"],
+					"enumDescriptions": [
+						"Always",
+						"Only when the corresponding directive is in a separate line",
+						"Only when the corresponding directive is vertically distant",
+						"Never"
+					],
+					"default": "whenInSeparateLines"
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
