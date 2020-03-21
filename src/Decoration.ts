@@ -9,6 +9,8 @@ import {
   window,
 } from 'vscode';
 
+import { Color } from './types';
+
 // A group whose members share the same decoration type (same background color)
 // For example, when there are 5 colors,
 // blocks in the depth 0 and 5 have the same decoration type.
@@ -23,12 +25,10 @@ interface AttachedText {
 }
 
 export default class Decoration {
-  private editor: TextEditor;
   private decorationGroups: DecorationGroup[];
   private afterTextStyle: ThemableDecorationAttachmentRenderOptions;
 
-  constructor(editor: TextEditor, colors: string[], afterTextStyle: ThemableDecorationAttachmentRenderOptions) {
-    this.editor = editor;
+  constructor(colors: Color[], afterTextStyle: ThemableDecorationAttachmentRenderOptions) {
     this.decorationGroups = colors.map(color => {
       return {
         type: window.createTextEditorDecorationType({
@@ -60,11 +60,18 @@ export default class Decoration {
     });
   }
 
-  public apply() {
+  public apply(editor: TextEditor) {
     // To clear the previously rendered decorations,
     // setDecorations() must be called even if the decoration group has no ranges
     for (const group of this.decorationGroups) {
-      this.editor.setDecorations(group.type, group.optionsList);
+      editor.setDecorations(group.type, group.optionsList);
+    }
+    this.clear();
+  }
+
+  private clear() {
+    for (let i = 0; i < this.decorationGroups.length; i++) {
+      this.decorationGroups[i].optionsList = [];
     }
   }
 }
