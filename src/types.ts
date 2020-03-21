@@ -1,3 +1,7 @@
+import { ThemeColor } from 'vscode';
+
+export type Color = ThemeColor | string;
+
 export type LinearPosition = number;
 
 export type DirectiveType = 'NON_BLOCK_DIRECTIVE'
@@ -24,4 +28,17 @@ export interface Tag {
   end: LinearPosition; // Not inclusive
   directives: Directive[];
   contentText: string;
+}
+
+// Since the a tag does not correspond to a directive,
+// Block needs to remember its constituent directives and tags separately.
+export interface Block {
+  isRoot: boolean;
+  startDirective: Directive | null;
+  startTagIndex: number; // -1 when the tag doesn't exist
+  middleDirectives: Directive[];
+  middleTagIndexes: number[];
+  endDirective: Directive | null;
+  endTagIndex: number; // -1 when the tag doesn't exist
+  children: Block[];
 }
