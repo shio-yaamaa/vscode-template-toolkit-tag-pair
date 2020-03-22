@@ -31,15 +31,25 @@ export interface Tag {
   takesWholeLine: boolean;
 }
 
-// Since the a tag does not correspond to a directive,
+export type TagIndex = number;
+
+// Since a tag does not correspond to a directive,
 // Block needs to remember its constituent directives and tags separately.
 export interface Block {
   isRoot: boolean;
   startDirective: Directive | null;
-  startTagIndex: number; // -1 when the tag doesn't exist
+  startTagIndex: TagIndex; // -1 when the tag doesn't exist
   middleDirectives: Directive[];
-  middleTagIndexes: number[];
+  middleTagIndexes: TagIndex[];
   endDirective: Directive | null;
-  endTagIndex: number; // -1 when the tag doesn't exist
+  endTagIndex: TagIndex; // -1 when the tag doesn't exist
   children: Block[];
+}
+
+export interface ParseResult {
+  tags: Tag[],
+  tree: Block;
+  // A map from tagIndex to the set of blocks to which the tag belong.
+  // This map is used for highlighting the corresponding tags of the currently selected tag.
+  tagToBlocks: Map<TagIndex, Block[]>;
 }

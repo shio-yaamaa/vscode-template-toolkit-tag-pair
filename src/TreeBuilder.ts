@@ -1,4 +1,5 @@
-import { Directive, Tag, Block } from './types';
+import { Directive, Tag, TagIndex, Block } from './types';
+import { createEmptyBlock } from './utility';
 
 export default class TreeBuilder {
   public build(tags: Tag[]): Block {
@@ -25,7 +26,7 @@ export default class TreeBuilder {
     return root;
   }
 
-  private handleStartDirective(stack: Stack<Block>, directive: Directive, tagIndex: number) {
+  private handleStartDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
     const stackTop = stack.getTop();
     if (!stackTop) return;
     const block = createEmptyBlock();
@@ -35,7 +36,7 @@ export default class TreeBuilder {
     stack.push(block);
   }
 
-  private handleMiddleDirective(stack: Stack<Block>, directive: Directive, tagIndex: number) {
+  private handleMiddleDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
     const stackTop = stack.getTop();
     if (!stackTop) return;
     if (stackTop.isRoot) {
@@ -50,7 +51,7 @@ export default class TreeBuilder {
     }
   }
 
-  private handleEndDirective(stack: Stack<Block>, directive: Directive, tagIndex: number) {
+  private handleEndDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
     const stackTop = stack.getTop();
     if (!stackTop) return;
     if (stackTop.isRoot) {
@@ -66,19 +67,6 @@ export default class TreeBuilder {
     }
   }
 }
-
-const createEmptyBlock = (isRoot: boolean = false): Block => {
-  return {
-    isRoot,
-    startDirective: null,
-    startTagIndex: -1,
-    middleDirectives: [],
-    middleTagIndexes: [],
-    endDirective: null,
-    endTagIndex: -1,
-    children: [],
-  };
-};
 
 class Stack<T> {
   private items: T[];
