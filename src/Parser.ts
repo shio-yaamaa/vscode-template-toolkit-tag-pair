@@ -90,6 +90,7 @@ export default class Parser {
             end: token.end,
             directives,
             contentText: this.getTagContentText(text, start, token.end),
+            takesWholeLine: this.checkTagTakesWholeLine(text, start, token.end),
           });
           break;
         case 'NON_BLOCK_DIRECTIVE':
@@ -106,5 +107,11 @@ export default class Parser {
   private getTagContentText(text: string, start: LinearPosition, end: LinearPosition): string {
     const raw = text.slice(start, end);
     return stripTag(raw);
+  }
+
+  private checkTagTakesWholeLine(text: string, start: LinearPosition, end: LinearPosition): boolean {
+    const followsLineBreakAndIndent = start === 0 || /\n\s*$/.test(text.slice(0, start));
+    const precedesLineBreak = text.length === end || text[end] === '\n';
+    return followsLineBreakAndIndent && precedesLineBreak;
   }
 }

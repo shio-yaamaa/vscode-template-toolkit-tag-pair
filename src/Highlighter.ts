@@ -45,7 +45,7 @@ export default class Highlighter {
         getRangeOf(document, tags[tagIndex]),
         {
           hover: startTagContentText,
-          after: startTagContentText,
+          after: tags[tagIndex].takesWholeLine ? startTagContentText : undefined,
         },
       );
     }
@@ -56,7 +56,7 @@ export default class Highlighter {
         getRangeOf(document, tags[block.endTagIndex]),
         {
           hover: startTagContentText,
-          after: startTagContentText,
+          after: tags[block.endTagIndex].takesWholeLine ? startTagContentText: undefined,
         },
       );
     }

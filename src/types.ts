@@ -28,6 +28,7 @@ export interface Tag {
   end: LinearPosition; // Not inclusive
   directives: Directive[];
   contentText: string;
+  takesWholeLine: boolean;
 }
 
 // Since the a tag does not correspond to a directive,
