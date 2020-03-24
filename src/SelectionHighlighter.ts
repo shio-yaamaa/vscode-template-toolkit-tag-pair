@@ -5,7 +5,8 @@ import {
 
 import { Tag, TagIndex, ParseResult } from './types';
 import { selectionHighlightDecorationType } from './style';
-import { getSelectedTagIndexes, rangeOf } from './utility';
+import { rangeOf } from './utility';
+import { getSelectedTagIndexes } from './templateComponentUtility';
 
 export default class SelectionHighlighter {
   public highlight(editor: TextEditor, selections: readonly Selection[], parseResult: ParseResult) {

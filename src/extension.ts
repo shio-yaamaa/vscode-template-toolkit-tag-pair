@@ -6,7 +6,8 @@ import Parser from './Parser';
 import TreeBuilder from './TreeBuilder';
 import DepthHighlighter from './DepthHighlighter';
 import SelectionHighlighter from './SelectionHighlighter';
-import { checkLanguage, mapTagToBlocks } from './utility';
+import { checkLanguage } from './utility';
+import { mapTagToBlocks } from './templateComponentUtility';
 
 let parseResult: ParseResult | null = null;
 

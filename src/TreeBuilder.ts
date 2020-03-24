@@ -1,5 +1,5 @@
 import { Directive, Tag, TagIndex, Block } from './types';
-import { createEmptyBlock } from './utility';
+import { createEmptyBlock } from './templateComponentUtility';
 
 export default class TreeBuilder {
   public build(tags: Tag[]): Block {

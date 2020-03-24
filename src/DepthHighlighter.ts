@@ -11,7 +11,8 @@ import { Tag, TagIndex, Block, ParseResult } from './types';
 import config from './config';
 import { depthHighlightDecorationTypes, incompleteBlockDecorationType } from './style';
 import DecorationAggregator, { DecorationGroupId } from './DecorationAggregator';
-import { isBlockComplete, rangeOf, verticalDistanceBetween } from './utility';
+import { rangeOf, verticalDistanceBetween } from './utility';
+import { isBlockComplete } from './templateComponentUtility';
 
 const incompleteBlockGroupId = 'incomplete';
 const minDistanceForAfterElement = 10;
