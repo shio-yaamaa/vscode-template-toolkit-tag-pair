@@ -3,12 +3,11 @@ import {
   DecorationRenderOptions,
   DecorationRangeBehavior,
   window,
-  workspace,
 } from 'vscode';
 
-const depthColors = workspace
-  .getConfiguration('templateToolkitTagPair.highlight')
-  .get<string[]>('depthColors') || [];
+import config from './config';
+
+const depthColors = config.highlight.depthColors || [];
 const incompleteBlockColor = new ThemeColor('templateToolkitTagPair.incompleteBlock');
 
 // The common styling for depth and incomplete block highlight
