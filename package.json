@@ -42,16 +42,6 @@
           "type": "array",
           "default": ["tt", "html"]
         },
-        "templateToolkitTagPair.highlight.target": {
-          "description": "Which part of the tag to highlight",
-          "type": "string",
-          "enum": ["tag", "directive"],
-          "enumDescriptions": [
-            "Highlight the entire tag containing a directive that constitutes a block",
-            "Highlight only the directive that constitutes a block"
-          ],
-          "default": "tag"
-        },
         "templateToolkitTagPair.highlight.depthColors": {
           "description": "Colors to highlight blocks in the order of depth (Repeated when depth > depthColors.length)",
           "type": "array",
@@ -70,14 +60,13 @@
         "templateToolkitTagPair.correspondingDirective.showNextToTag": {
           "description": "Whether to show the corresponding block-starting directive next to the END tags",
           "type": "string",
-          "enum": ["always", "whenInSeparateLines", "whenDistant", "never"],
+          "enum": ["whenPossible", "whenDistant", "never"],
           "enumDescriptions": [
-            "Always",
-            "Only when the corresponding directive is in a separate line",
+            "When there is enough space",
             "Only when the corresponding directive is vertically distant",
             "Never"
           ],
-          "default": "whenInSeparateLines"
+          "default": "whenDistant"
         }
       }
     }
