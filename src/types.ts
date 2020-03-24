@@ -36,7 +36,7 @@ export type TagIndex = number;
 // Since a tag does not correspond to a directive,
 // Block needs to remember its constituent directives and tags separately.
 export interface Block {
-  isRoot: boolean;
+  depth: number; // -1 for the root block (the container of the outermost blocks)
   startDirective: Directive | null;
   startTagIndex: TagIndex; // -1 when the tag doesn't exist
   middleDirectives: Directive[];

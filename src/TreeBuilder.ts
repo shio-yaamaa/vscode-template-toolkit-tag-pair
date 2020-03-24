@@ -4,7 +4,7 @@ import { createEmptyBlock } from './utility';
 export default class TreeBuilder {
   public build(tags: Tag[]): Block {
     const stack = new Stack<Block>();
-    const root = createEmptyBlock(true);
+    const root = createEmptyBlock(-1);
     stack.push(root);
 
     for (let tagIndex = 0; tagIndex < tags.length; tagIndex++) {
@@ -27,9 +27,9 @@ export default class TreeBuilder {
   }
 
   private handleStartDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
-    const stackTop = stack.getTop();
+    const stackTop = stack.top;
     if (!stackTop) return;
-    const block = createEmptyBlock();
+    const block = createEmptyBlock(stack.length - 1);
     block.startDirective = directive;
     block.startTagIndex = tagIndex;
     stackTop.children.push(block);
@@ -37,10 +37,10 @@ export default class TreeBuilder {
   }
 
   private handleMiddleDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
-    const stackTop = stack.getTop();
+    const stackTop = stack.top;
     if (!stackTop) return;
-    if (stackTop.isRoot) {
-      const block = createEmptyBlock();
+    if (stackTop.depth === -1) {
+      const block = createEmptyBlock(0);
       block.middleDirectives.push(directive);
       block.middleTagIndexes.push(tagIndex);
       stackTop.children.push(block);
@@ -52,10 +52,10 @@ export default class TreeBuilder {
   }
 
   private handleEndDirective(stack: Stack<Block>, directive: Directive, tagIndex: TagIndex) {
-    const stackTop = stack.getTop();
+    const stackTop = stack.top;
     if (!stackTop) return;
-    if (stackTop.isRoot) {
-      const block = createEmptyBlock();
+    if (stackTop.depth === -1) {
+      const block = createEmptyBlock(0);
       block.endDirective = directive;
       block.endTagIndex = tagIndex;
       stackTop.children.push(block);
@@ -83,9 +83,13 @@ class Stack<T> {
     return this.items.pop();
   }
 
-  getTop(): T | undefined {
+  get top(): T | undefined {
     return this.items.length > 0
       ? this.items[this.items.length - 1]
       : undefined;
+  }
+
+  get length(): number {
+    return this.items.length;
   }
 }
