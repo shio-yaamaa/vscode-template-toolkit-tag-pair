@@ -32,6 +32,24 @@
           "light": "#00000033",
           "highContrast": "#FFFFFF33"
         }
+      },
+      {
+        "id": "templateToolkitTagPair.selectedBlock",
+        "description": "The color of the tags belonging to the selected block",
+        "defaults": {
+          "dark": "#FFFFFF11",
+          "light": "#00000011",
+          "highContrast": "#FFFFFF11"
+        }
+      },
+      {
+        "id": "templateToolkitTagPair.selectedBlockBorder",
+        "description": "The border color of the tags belonging to the selected block",
+        "defaults": {
+          "dark": "#FFFFFF44",
+          "light": "#00000044",
+          "highContrast": "#FFFFFF44"
+        }
       }
     ],
     "configuration": {
