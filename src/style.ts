@@ -1,23 +1,25 @@
 import {
-  ThemeColor,
   DecorationRenderOptions,
   DecorationRangeBehavior,
   window,
 } from 'vscode';
 
 import config from './config';
-
-const depthColors = config.highlight.depthColors || [];
-const incompleteBlockColor = new ThemeColor('templateToolkitTagPair.incompleteBlock');
+import themeColor from './themeColor';
 
 // The common styling for depth and incomplete block highlight
 const depthHighlightCommonDecorationOptions: DecorationRenderOptions = {
   rangeBehavior: DecorationRangeBehavior.ClosedClosed,
   after: {
     margin: '0 0 0 3em',
-    color: new ThemeColor('templateToolkitTagPair.correspondingDirectiveNextToTag'),
+    color: themeColor.correspondingDirectiveNextToTag,
   },
 };
+
+const depthColors = config.highlight.depthColors || [];
+if (depthColors.length === 0) {
+  depthColors.push('#00000000'); // Add a transparent color
+}
 
 export const depthHighlightDecorationTypes = depthColors.map(color => {
   return window.createTextEditorDecorationType({
@@ -28,12 +30,13 @@ export const depthHighlightDecorationTypes = depthColors.map(color => {
 
 export const incompleteBlockDecorationType = window.createTextEditorDecorationType({
   ...depthHighlightCommonDecorationOptions,
-  backgroundColor: incompleteBlockColor,
+  backgroundColor: themeColor.incompleteBlock,
 });
 
 export const selectionHighlightDecorationType = window.createTextEditorDecorationType({
   rangeBehavior: DecorationRangeBehavior.ClosedClosed,
-  borderWidth: '2px',
-  borderColor: 'red',
+  backgroundColor: themeColor.selectedBlock,
+  borderWidth: '1px',
+  borderColor: themeColor.selectedBlockBorder,
   borderStyle: 'solid',
 });
