@@ -1,5 +1,7 @@
-import { LinearPosition, Token, Directive, Tag } from './types';
+import { LinearPosition, Token, Directive, Tag, ParseResult } from './types';
 import { Context, TokenDefinition, tokens, stripTag } from './syntax';
+import TreeBuilder from './TreeBuilder';
+import { mapTagToBlocks } from './templateComponentUtility';
 
 interface MatchResult {
   length: number;
@@ -61,20 +63,8 @@ class Tokenizer {
   }
 }
 
-export default class Parser {
-  private tokenizer: Tokenizer;
-
-  constructor() {
-    this.tokenizer = new Tokenizer();
-  }
-
-  public parse(text: string): Tag[] {
-    const tokens = this.tokenizer.tokenize(text);
-    const tags = this.buildTags(text, tokens);
-    return tags;
-  }
-
-  private buildTags(text: string, tokens: Token[]): Tag[] {
+class TagBuilder {
+  public build(text: string, tokens: Token[]): Tag[] {
     const tags: Tag[] = [];
     let start = 0;
     let directives: Directive[] = [];
@@ -113,5 +103,31 @@ export default class Parser {
     const followsLineBreakAndIndent = start === 0 || /\n\s*$/.test(text.slice(0, start));
     const precedesLineBreak = text.length === end || text[end] === '\n';
     return followsLineBreakAndIndent && precedesLineBreak;
+  }
+}
+
+export default class Parser {
+  private tokenizer: Tokenizer;
+  private tagBuilder: TagBuilder;
+  private treeBuilder: TreeBuilder;
+
+  constructor() {
+    this.tokenizer = new Tokenizer();
+    this.tagBuilder = new TagBuilder();
+    this.treeBuilder = new TreeBuilder();
+  }
+
+  public parse(text: string): ParseResult | null {
+    try {
+      const tokens = this.tokenizer.tokenize(text);
+      const tags = this.tagBuilder.build(text, tokens);
+      const tree = this.treeBuilder.build(tags);
+      const tagToBlocks = mapTagToBlocks(tree);
+      return { tags, tree, tagToBlocks };
+    } catch (error) {
+      // Fail silently because parsing errors are expected to occur
+      // when the current template file is work in progress.
+      return null;
+    }
   }
 }
