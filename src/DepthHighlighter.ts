@@ -8,7 +8,7 @@ import {
 } from 'vscode';
 
 import { Tag, TagIndex, Block, ParseResult } from './types';
-import config from './config';
+import config from './Config';
 import { depthHighlightDecorationTypes, incompleteBlockDecorationType } from './style';
 import DecorationAggregator, { DecorationGroupId } from './DecorationAggregator';
 import { rangeOf, verticalDistanceBetween } from './utility';

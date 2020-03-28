@@ -4,7 +4,7 @@ import {
   window,
 } from 'vscode';
 
-import config from './config';
+import config from './Config';
 import themeColor from './themeColor';
 
 // The common styling for depth and incomplete block highlight
