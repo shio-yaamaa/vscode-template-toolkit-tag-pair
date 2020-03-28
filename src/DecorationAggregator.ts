@@ -45,12 +45,17 @@ export default class DecorationAggregator {
     for (const group of this.decorationGroups.values()) {
       editor.setDecorations(group.type, group.optionsList);
     }
-    this.clear();
+    this.empty();
   }
 
-  private clear() {
+  private empty() {
     for (const group of this.decorationGroups.values()) {
       group.optionsList = [];
     }
+  }
+
+  public clear(editor: TextEditor) {
+    this.empty();
+    this.apply(editor);
   }
 }

@@ -93,4 +93,8 @@ export default class DepthHighlighter {
   private startDirectiveExistsInSeparateTag(tagIndex: TagIndex, block: Block): boolean {
     return !!(block.startDirective && block.startTagIndex != tagIndex);
   }
+
+  public clear(editor: TextEditor) {
+    this.aggregator.clear(editor);
+  }
 }

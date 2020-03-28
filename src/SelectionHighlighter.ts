@@ -1,7 +1,4 @@
-import {
-  TextEditor,
-  Selection,
-} from 'vscode';
+import { TextEditor, Selection } from 'vscode';
 
 import { Tag, TagIndex, ParseResult } from './types';
 import { selectionHighlightDecorationType } from './style';
@@ -9,7 +6,8 @@ import { rangeOf } from './utility';
 import { getSelectedTagIndexes } from './templateComponentUtility';
 
 export default class SelectionHighlighter {
-  public highlight(editor: TextEditor, selections: readonly Selection[], parseResult: ParseResult) {
+  public highlight(editor: TextEditor, parseResult: ParseResult) {
+    const selections = editor.selections;
     const selectedTagIndexes = getSelectedTagIndexes(parseResult.tags, editor.document, selections);
     const tags = this.getTagsToHighlight(parseResult, selectedTagIndexes);
     editor.setDecorations(
@@ -32,5 +30,9 @@ export default class SelectionHighlighter {
     }
     tagIndexes.delete(-1); // Remove -1 that might have been added if a block is incomplete
     return [...tagIndexes].map(index => parseResult.tags[index]);
+  }
+
+  public clear(editor: TextEditor) {
+    editor.setDecorations(selectionHighlightDecorationType, []);
   }
 }
