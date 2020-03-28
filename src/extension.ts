@@ -1,59 +1,108 @@
-import { ExtensionContext, window, workspace } from 'vscode';
+import {
+  ExtensionContext,
+  Disposable,
+  TextDocument,
+  TextEditor,
+  window,
+  workspace,
+} from 'vscode';
 
 import { ParseResult } from './types';
-import Scheduler from './Scheduler';
 import Parser from './Parser';
-import TreeBuilder from './TreeBuilder';
+import Scheduler from './Scheduler';
 import DepthHighlighter from './DepthHighlighter';
 import SelectionHighlighter from './SelectionHighlighter';
 import { checkLanguage } from './utility';
-import { mapTagToBlocks } from './templateComponentUtility';
-
-let parseResult: ParseResult | null = null;
 
 export function activate(context: ExtensionContext) {
-  const scheduler = new Scheduler(100);
+  let parseResult: ParseResult | null = null;
   const parser = new Parser();
-  const treeBuilder = new TreeBuilder();
+  const parseAndHighlightScheduler = new Scheduler(100);
+  const selectionHighlightScheduler = new Scheduler(100);
   const depthHighlighter = new DepthHighlighter();
   const selectionHighlighter = new SelectionHighlighter();
+  let documentChangeListener: Disposable | null = null;
+  let selectionChangeListener: Disposable | null = null;
 
-  window.onDidChangeActiveTextEditor(_editor => {
-    parseAndHighlight(scheduler, parser, treeBuilder, depthHighlighter, selectionHighlighter);
-  }, null, context.subscriptions);
-
-  workspace.onDidChangeTextDocument(_event => {
-    parseAndHighlight(scheduler, parser, treeBuilder, depthHighlighter, selectionHighlighter);
-  }, null, context.subscriptions);
-
-  window.onDidChangeTextEditorSelection(event => {
-    if (!parseResult) return;
+  const initializeHighlight = () => {
     const editor = window.activeTextEditor;
-    if (editor && checkLanguage(editor.document)) {
-      selectionHighlighter.highlight(editor, event.selections, parseResult);
+    if (!editor) return;
+    const isActiveLanguage = checkLanguage(editor.document);
+    scheduleParseAndHighlight(isActiveLanguage, editor);
+  };
+
+  const setupListeners = () => {
+    window.onDidChangeActiveTextEditor(editor => {
+      if (!editor) return;
+      const isActiveLanguage = checkLanguage(editor.document);
+      scheduleParseAndHighlight(isActiveLanguage, editor);
+      toggleListeners(isActiveLanguage);
+    }, null, context.subscriptions);
+
+    // An event that is emitted when a text document is opened
+    // or when the language id of a text document has been changed.
+    // The event is emitted before the document is updated in the active text editor.
+    workspace.onDidOpenTextDocument(document => {
+      const isActiveLanguage = checkLanguage(document);
+      scheduleParseAndHighlight(isActiveLanguage, undefined, document);
+      toggleListeners(isActiveLanguage);
+    }, null, context.subscriptions);
+
+    if (window.activeTextEditor?.document) {
+      toggleListeners(checkLanguage(window.activeTextEditor.document));
     }
-  });
+  };
 
-  parseAndHighlight(scheduler, parser, treeBuilder, depthHighlighter, selectionHighlighter);
-}
+  const toggleListeners = (shouldActivate: boolean) => {
+    if (shouldActivate) {
+      if (!documentChangeListener) {
+        documentChangeListener = workspace.onDidChangeTextDocument(event => {
+          if (event.contentChanges.length === 0) return;
+          scheduleParseAndHighlight(true, undefined, event.document);
+        }, null, context.subscriptions);
+      }
+      if (!selectionChangeListener) {
+        selectionChangeListener = window.onDidChangeTextEditorSelection(event => {
+          scheduleSelectionHighlight(event.textEditor);
+        });
+      }
+    } else {
+      documentChangeListener?.dispose();
+      selectionChangeListener?.dispose();
+      documentChangeListener = null;
+      selectionChangeListener = null;
+    }
+  };
 
-const parseAndHighlight = (scheduler: Scheduler, parser: Parser, treeBuilder: TreeBuilder, depthHighlighter: DepthHighlighter, selectionHighlighter: SelectionHighlighter) => {
-  const editor = window.activeTextEditor;
-  if (editor && checkLanguage(editor.document)) {
-    scheduler.schedule(() => {
-      try {
-        const tags = parser.parse(editor.document.getText());
-        const tree = treeBuilder.build(tags);
-        const tagToBlocks = mapTagToBlocks(tree);
-        parseResult = { tags, tree, tagToBlocks };
-        depthHighlighter.highlight(editor, parseResult);
-        selectionHighlighter.highlight(editor, editor.selections, parseResult);
-      } catch (error) {
-        // Fail silently because parsing errors are expected to occur
-        // when the current template file is work in progress.
+  const scheduleParseAndHighlight = (isActiveLanguage: boolean, editor?: TextEditor, document?: TextDocument) => {
+    const currentEditor = editor || window.activeTextEditor;
+    if (!currentEditor) return;
+    const currentDocument = document || currentEditor.document;
+    parseAndHighlightScheduler.schedule(() => {
+      parseResult = isActiveLanguage
+        ? parser.parse(currentDocument.getText())
+        : null;
+      if (parseResult) { // If isActiveLanguage and parsing succeeded
+        depthHighlighter.highlight(currentEditor, parseResult);
+        selectionHighlighter.highlight(currentEditor, parseResult);
+      } else {
+        depthHighlighter.clear(currentEditor);
+        selectionHighlighter.clear(currentEditor);
       }
     });
-  }
-};
+  };
+
+  const scheduleSelectionHighlight = (editor?: TextEditor) => {
+    const currentEditor = editor || window.activeTextEditor;
+    if (!currentEditor) return;
+    selectionHighlightScheduler.schedule(() => {
+      if (!parseResult) return;
+      selectionHighlighter.highlight(currentEditor, parseResult);
+    });
+  };
+
+  initializeHighlight();
+  setupListeners();
+}
 
 export function deactivate() {}
