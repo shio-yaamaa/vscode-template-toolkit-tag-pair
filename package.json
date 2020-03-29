@@ -2,7 +2,7 @@
   "name": "template-toolkit-tag-pair",
   "displayName": "Template Toolkit Tag Pair",
   "description": "Highlight the matching tags in Perl Template Toolkit",
-  "version": "0.0.1",
+  "publisher": "yaamaa",
   "engines": {
     "vscode": "^1.43.0"
   },
@@ -98,5 +98,10 @@
     "typescript": "^3.3.1",
     "tslint": "^5.12.1",
     "vscode-test": "^1.2.0"
-  }
+  },
+  "repository": {
+		"type": "git",
+		"url": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair"
+	},
+	"homepage": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair/blob/master/README.md"
 }
