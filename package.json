@@ -64,10 +64,10 @@
           "description": "Colors to highlight blocks in the order of depth (Repeated when depth > depthColors.length)",
           "type": "array",
           "default": [
-            "#FF980022",
-            "#43A04722",
-            "#00BCD422",
-            "#3F51B522"
+            "#FFFF402F",
+            "#7FFF7F2F",
+            "#FF7FFF2F",
+            "#4FECEC2F"
           ]
         },
         "templateToolkitTagPair.correspondingDirective.showOnHover": {
