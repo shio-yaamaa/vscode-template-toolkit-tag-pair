@@ -30,7 +30,7 @@ export const depthHighlightDecorationTypes = depthColors.map(color => {
 
 export const incompleteBlockDecorationType = window.createTextEditorDecorationType({
   ...depthHighlightCommonDecorationOptions,
-  backgroundColor: themeColor.incompleteBlock,
+  textDecoration: 'underline #E53935 wavy', // ThemeColor can't be used here because it doesn't provide the actual color value
 });
 
 export const selectionHighlightDecorationType = window.createTextEditorDecorationType({

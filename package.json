@@ -16,15 +16,6 @@
   "contributes": {
     "colors": [
       {
-        "id": "templateToolkitTagPair.incompleteBlock",
-        "description": "The color to highlight incomplete blocks (i.e. blocks that lack the start or end directive)",
-        "defaults": {
-          "dark": "#B71C1C55",
-          "light": "#B71C1C55",
-          "highContrast": "#B71C1C55"
-        }
-      },
-      {
         "id": "templateToolkitTagPair.correspondingDirectiveNextToTag",
         "description": "The color of the corresponding directive rendered next to the END tags",
         "defaults": {
