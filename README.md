@@ -1,65 +1,42 @@
-# template-toolkit-tag-pair README
-
-This is the README for your extension "template-toolkit-tag-pair". After writing up a brief description, we recommend including the following sections.
+# Template-Toolkit Tag Pair
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Change the background colors of the tags according to their nesting levels
 
-For example if there is an image subfolder under your extension project workspace:
+\!\[rainbow\]\(images/rainbow.png\)
 
-\!\[feature X\]\(images/feature-x.png\)
+- Highlight the currently selected block
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+\!\[selected-block\]\(images/selected-block.png\)
 
-## Requirements
+- Show the content of the corresponding tag
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+\!\[corresponding-tag\]\(images/corresponding-tag.png\)
+
+- Underline incomplete blocks (for example, `IF` directive without an `END`)
+  - The underline looks weird for now😔
+
+\!\[incomplete-block\]\(images/incomplete-block.png\)
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+- `templateToolkitTagPair.general.languages`: List of the languages for which this extension is activated
+  - Default: `["tt", "html"]`
+- `templateToolkitTagPair.highlight.depthColors`: Colors to highlight blocks
+  - Example: `["#FFFF402F", "#7FFF7F2F", "#FF7FFF2F", "#4FECEC2F"]`
+- `templateToolkitTagPair.correspondingDirective.showOnHover`: Whether to show the corresponding block-starting directive when you hover over the `END` tags
+  - Default: `true`
+- `templateToolkitTagPair.correspondingDirective.showNextToTag`: Whether to show the corresponding block-starting directive next to the `END` tags
+  - Options:
+    - `"whenPossible"`: When there is enough space to show the text
+    - `"whenDistant"` (default): Only when the corresponding directive is vertically distant (at least 10 lines apart)
+    - `"never"`
 
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Changing configurations related to color requires an editor restart😢
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Barely works
