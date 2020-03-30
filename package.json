@@ -50,7 +50,10 @@
         "templateToolkitTagPair.general.languages": {
           "description": "List of the languages for which this extension is activated",
           "type": "array",
-          "default": ["tt", "html"]
+          "default": [
+            "tt",
+            "html"
+          ]
         },
         "templateToolkitTagPair.highlight.depthColors": {
           "description": "Colors to highlight blocks in the order of depth (Repeated when depth > depthColors.length)",
@@ -70,7 +73,11 @@
         "templateToolkitTagPair.correspondingDirective.showNextToTag": {
           "description": "Whether to show the corresponding block-starting directive next to the END tags",
           "type": "string",
-          "enum": ["whenPossible", "whenDistant", "never"],
+          "enum": [
+            "whenPossible",
+            "whenDistant",
+            "never"
+          ],
           "enumDescriptions": [
             "When there is enough space",
             "Only when the corresponding directive is vertically distant",
@@ -100,8 +107,9 @@
     "vscode-test": "^1.2.0"
   },
   "repository": {
-		"type": "git",
-		"url": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair"
-	},
-	"homepage": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair/blob/master/README.md"
+    "type": "git",
+    "url": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair"
+  },
+  "homepage": "https://github.com/shio-yaamaa/vscode-template-toolkit-tag-pair/blob/master/README.md",
+  "version": "0.0.1"
 }
