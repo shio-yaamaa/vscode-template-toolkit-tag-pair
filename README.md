@@ -4,20 +4,19 @@
 
 - Change the background colors of the tags according to their nesting levels
 
-\!\[rainbow\]\(images/rainbow.png\)
+![rainbow](https://raw.githubusercontent.com/shio-yaamaa/vscode-template-toolkit-tag-pair/master/images/rainbow.png)
 
 - Highlight the currently selected block
 
-\!\[selected-block\]\(images/selected-block.png\)
+![selected-block](https://raw.githubusercontent.com/shio-yaamaa/vscode-template-toolkit-tag-pair/master/images/selected-block.png)
 
 - Show the content of the corresponding tag
 
-\!\[corresponding-tag\]\(images/corresponding-tag.png\)
+![corresponding-tag](https://raw.githubusercontent.com/shio-yaamaa/vscode-template-toolkit-tag-pair/master/images/corresponding-tag.png)
 
 - Underline incomplete blocks (for example, `IF` directive without an `END`)
-  - The underline looks weird for now😔
 
-\!\[incomplete-block\]\(images/incomplete-block.png\)
+![incomplete-block](https://raw.githubusercontent.com/shio-yaamaa/vscode-template-toolkit-tag-pair/master/images/incomplete-block.png)
 
 ## Extension Settings
 
