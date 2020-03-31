@@ -24,11 +24,6 @@ const directives = {
   blockEnd: ['END'],
 };
 
-// FILTER directive is, when used in isolation, a block-starting directive.
-// It can also follow various other non-block directives like INCLUDE.
-// This extension cannot distinguish these two types
-// and treats every instance of FILTER as block-starting.
-
 const fromDirectives = (directives: string[]): RegExp => {
   const anyDirective = directives.map(directive => directive).join('|');
   return new RegExp(`^(${anyDirective})(?=\\W)`); // Directive name followed by a non-word character
@@ -47,7 +42,7 @@ const tokensOutsideTag: TokenDefinition[] = [
   },
   // Tag open
   {
-    pattern: /^\[%((?=[^-+#])|[-+](?=[^#]))/, // Opening tag (+ chomping option) - pound sign
+    pattern: /^\[%[-+]?\s*(?=$|[^#])/, // Opening tag (+ chomping option) (+ whitespace) - pound sign
     tokenType: 'TAG_OPEN',
     contextAfter: 'IN_TAG',
   },
@@ -56,7 +51,7 @@ const tokensOutsideTag: TokenDefinition[] = [
 const tokensInTag: TokenDefinition[] = [
   // Tag close
   {
-    pattern: /^[-+]?%\]/, // (Chomping option) + closing tag
+    pattern: /^\s*[-+]?%\]/, // Any number of whitespace + (chomping option) + closing tag
     tokenType: 'TAG_CLOSE',
     contextAfter: 'OUTSIDE_TAG',
   },
@@ -84,9 +79,9 @@ const tokensInTag: TokenDefinition[] = [
     tokenType: 'BLOCK_END_DIRECTIVE',
     contextAfter: 'IN_TAG',
   },
-  // Directive delimiter
+  // Statement delimiter
   {
-    pattern: /^(\s|;)+/, // Sequence of whitespace or semicolons
+    pattern: /^\s*;\s*/, // Semicolon preceded by or followed by any number of whitespace
     contextAfter: 'IN_TAG',
   },
   // String literal
@@ -101,18 +96,20 @@ const tokensInTag: TokenDefinition[] = [
   },
   // Code in tag
   {
-    pattern: /^[^]+?(?="|'|#|%]|\s|;)/, // Anything including line breaks until a string literal, line comment, tag close, or directive delimiter
+    pattern: /^[^]+?(?="|'|#|%]|;)/, // Anything including line breaks until a string literal, line comment, tag close, or statement delimiter
     contextAfter: 'IN_TAG',
   }
 ];
 
-// The characters in the directive delimiter are the ones that can be followed by a directive.
-// When a directive delimiter appears in a tag,
-// 1. "Code in tag" stops matching
-// 2. Directive delimiter matches
-// 3. Directives are checked for a match
-// 4. If none of the directives matches, "code in tag" matches again in the next iteration
-// Example: [% SET a = 1; SET b = 2 %]
+// Only the first directive in a statement (a portion of code separated by semicolons)
+// can determine the block structure.
+// For example, IF and FILTER start a block when they are the first directive in a statement.
+// [% IF true %][% END %], [% FILTER html %][% END %]
+// However, when they follow other directives in the same statement,
+// they don't affect the structure of the block.
+// [% LAST IF true %], [% INCLUDE text FILTER html %]
+// Second or later directives in a statement are ignored by this parser
+// as they are recognized as part of "code in tag" /[^]+?(?="|'|#|%]|;)/
 
 export const tokens = {
   'OUTSIDE_TAG': tokensOutsideTag,
