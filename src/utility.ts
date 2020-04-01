@@ -1,4 +1,4 @@
-import { TextDocument, Range } from 'vscode';
+import { TextDocument, Range, window } from 'vscode';
 
 import config from './Config';
 
@@ -19,6 +19,13 @@ export const setOrAddMapValue = <K, V>(map: Map<K, V[]>, key: K, item: V) => {
 export const checkLanguage = (document: TextDocument): boolean => {
   const configLanguages = config.general.languages || [];
   return configLanguages.indexOf(document.languageId) >= 0;
+};
+
+export const isDocumentOfCurrentActiveEditor = (document: TextDocument): boolean => {
+  const editor = window.activeTextEditor;
+  if (!editor) return false;
+  const currentDocument = editor.document;
+  return currentDocument.uri === document.uri;
 };
 
 export const rangeOf = (document: TextDocument, item: ItemWithRange) => {

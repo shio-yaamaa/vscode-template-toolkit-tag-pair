@@ -12,7 +12,7 @@ import Parser from './Parser';
 import Scheduler from './Scheduler';
 import DepthHighlighter from './DepthHighlighter';
 import SelectionHighlighter from './SelectionHighlighter';
-import { checkLanguage } from './utility';
+import { checkLanguage, isDocumentOfCurrentActiveEditor } from './utility';
 
 export function activate(context: ExtensionContext) {
   let parseResult: ParseResult | null = null;
@@ -39,10 +39,17 @@ export function activate(context: ExtensionContext) {
       toggleListeners(isActiveLanguage);
     }, null, context.subscriptions);
 
-    // An event that is emitted when a text document is opened
+    // onDidOpenTextDocument is emitted when a text document is opened
     // or when the language id of a text document has been changed.
-    // The event is emitted before the document is updated in the active text editor.
+    // In the former case, the document open is often not initiated by the user
+    // and not visible to the user.
+    // Examples:
+    // - /index.html.git gets opened right after the user opens /index.html in a Git repository
+    // - User/settings.json is opened when the user changes some configuration
+    //   via the command palette
+    // isDocumentOfCurrentActiveEditor check is used to detect only the language changes.
     workspace.onDidOpenTextDocument(document => {
+      if (!isDocumentOfCurrentActiveEditor(document)) return;
       const isActiveLanguage = checkLanguage(document);
       scheduleParseAndHighlight(isActiveLanguage, undefined, document);
       toggleListeners(isActiveLanguage);
@@ -58,6 +65,11 @@ export function activate(context: ExtensionContext) {
       if (!documentChangeListener) {
         documentChangeListener = workspace.onDidChangeTextDocument(event => {
           if (event.contentChanges.length === 0) return;
+          // Sometimes this event captures text changes in invisible documents
+          // like VS Code settings files.
+          // isDocumentOfCurrentActiveEditor check is used to ensure
+          // that the change has occurred in the currently active text editor.
+          if (!isDocumentOfCurrentActiveEditor(event.document)) return;
           scheduleParseAndHighlight(true, undefined, event.document);
         }, null, context.subscriptions);
       }
