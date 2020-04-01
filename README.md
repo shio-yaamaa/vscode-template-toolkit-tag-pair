@@ -33,9 +33,3 @@
     - `"never"`
 
 Changing configurations related to color requires an editor restart😢
-
-## Release Notes
-
-### 0.0.1
-
-Barely works
