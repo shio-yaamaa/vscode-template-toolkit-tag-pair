@@ -82,6 +82,7 @@ const tokensInTag: TokenDefinition[] = [
   // Statement delimiter
   {
     pattern: /^\s*;\s*/, // Semicolon preceded by or followed by any number of whitespace
+    tokenType: 'STATEMENT_DELIMITER',
     contextAfter: 'IN_TAG',
   },
   // Whitespace
@@ -105,16 +106,6 @@ const tokensInTag: TokenDefinition[] = [
     contextAfter: 'IN_TAG',
   }
 ];
-
-// Only the first directive in a statement (a portion of code separated by semicolons)
-// can determine the block structure.
-// For example, IF and FILTER start a block when they are the first directive in a statement.
-// [% IF true %][% END %], [% FILTER html %][% END %]
-// However, when they follow other directives in the same statement,
-// they don't affect the structure of the block.
-// [% LAST IF true %], [% INCLUDE text FILTER html %]
-// Second or later directives in a statement are ignored by this parser
-// as they are recognized as part of "code in tag" /[^]+?(?="|'|#|%]|;)/
 
 export const tokens = {
   'OUTSIDE_TAG': tokensOutsideTag,
