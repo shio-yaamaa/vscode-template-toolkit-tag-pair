@@ -42,7 +42,7 @@ const tokensOutsideTag: TokenDefinition[] = [
   },
   // Tag open
   {
-    pattern: /^\[%[-+]?\s*(?=$|[^#])/, // Opening tag (+ chomping option) (+ whitespace) - pound sign
+    pattern: /^\[%((?=[^-+#])|[-+](?=[^#]))/, // Opening tag (+ chomping option) (+ whitespace) - pound sign
     tokenType: 'TAG_OPEN',
     contextAfter: 'IN_TAG',
   },
@@ -84,6 +84,11 @@ const tokensInTag: TokenDefinition[] = [
     pattern: /^\s*;\s*/, // Semicolon preceded by or followed by any number of whitespace
     contextAfter: 'IN_TAG',
   },
+  // Whitespace
+  {
+    pattern: /^\s+/,  // One or more whitespace
+    contextAfter: 'IN_TAG',
+  },
   // String literal
   {
     pattern: /^(\"[^]*?\"|\'[^]*?\')/, // Anything including line breaks enclosed in "" or ''
@@ -96,7 +101,7 @@ const tokensInTag: TokenDefinition[] = [
   },
   // Code in tag
   {
-    pattern: /^[^]+?(?="|'|#|%]|;)/, // Anything including line breaks until a string literal, line comment, tag close, or statement delimiter
+    pattern: /^[^]+?(?="|'|#|%]|;|\s)/, // Anything including line breaks until a string literal, line comment, tag close, statement delimiter, or whitespace
     contextAfter: 'IN_TAG',
   }
 ];
