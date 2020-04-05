@@ -93,6 +93,7 @@ const tokensInTag: TokenDefinition[] = [
   // String literal
   {
     pattern: /^(\"[^]*?\"|\'[^]*?\')/, // Anything including line breaks enclosed in "" or ''
+    tokenType: 'STRING_LITERAL',
     contextAfter: 'IN_TAG',
   },
   // Line comment
@@ -103,6 +104,7 @@ const tokensInTag: TokenDefinition[] = [
   // Code in tag
   {
     pattern: /^[^]+?(?="|'|#|%]|;|\s)/, // Anything including line breaks until a string literal, line comment, tag close, statement delimiter, or whitespace
+    tokenType: 'CODE_IN_TAG',
     contextAfter: 'IN_TAG',
   }
 ];

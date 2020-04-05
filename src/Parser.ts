@@ -68,7 +68,7 @@ class TagBuilder {
     const tags: Tag[] = [];
     let start = 0;
     let directives: Directive[] = [];
-    let isBeginningOfStatement = true; // If the next directive is the first directive in a statement
+    let isBeginningOfStatement = true; // If the next directive is the first entity in the statement
     for (const token of tokens) {
       switch (token.type) {
         case 'TAG_OPEN':
@@ -85,7 +85,6 @@ class TagBuilder {
             takesWholeLine: this.checkTagTakesWholeLine(text, start, token.end),
           });
           break;
-        case 'NON_BLOCK_DIRECTIVE':
         case 'BLOCK_START_DIRECTIVE':
         case 'BLOCK_MIDDLE_DIRECTIVE':
         case 'BLOCK_END_DIRECTIVE':
@@ -93,6 +92,11 @@ class TagBuilder {
             directives.push(token as Directive);
             isBeginningOfStatement = false;
           }
+          break;
+        case 'NON_BLOCK_DIRECTIVE':
+        case 'STRING_LITERAL':
+        case 'CODE_IN_TAG':
+          isBeginningOfStatement = false;
           break;
         case 'STATEMENT_DELIMITER':
           isBeginningOfStatement = true;
