@@ -1,4 +1,4 @@
-import { TextEditor, Selection } from 'vscode';
+import { TextEditor } from 'vscode';
 
 import { Tag, TagIndex, ParseResult } from './types';
 import { selectionHighlightDecorationType } from './style';
